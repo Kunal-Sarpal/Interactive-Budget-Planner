@@ -23,11 +23,11 @@
 
     @auth
     <!-- Create Daily / Monthly Expense -->
-    <div class="w-full md:w-1/3 mt-6 bg-white p-4 rounded-lg shadow-lg">
+    <div class="w-full md:w-1/2 mt-6 bg-white p-4 rounded-lg shadow-lg">
         <h3 class="text-xl font-semibold mb-4">Add Your Expenses</h3>
         <div class="space-x-4">
             <a href="{{ route('daily-expense.create') }}" class="bg-green-600 text-white py-2 px-4 rounded-md">Create Daily Expense</a>
-            <a href="{{ route('monthly-expense.create') }}" class="bg-green-600 text-white py-2 px-4 rounded-md">Create Monthly Expense</a>
+            <a href="{{ route('monthly_expense.create') }}" class="bg-green-600 text-white py-2 px-4 rounded-md">Create Monthly Expense</a>
         </div>
     </div>
 
@@ -51,48 +51,51 @@
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
-    // Get your user's expenses from backend (passed by controller)
+    // Get your user's expenses from the backend (passed by controller)
     var monthlyExpenses = @json($monthlyExpenses);
-    var yearlyExpenses = @json($yearlyExpenses);
+var dailyExpenses = @json($dailyExpenses);
 
-    // Monthly Expense Chart
-    var monthlyCtx = document.getElementById('monthlyExpenseChart').getContext('2d');
-    var monthlyExpenseChart = new Chart(monthlyCtx, {
-        type: 'bar',
-        data: {
-            labels: Object.keys(monthlyExpenses),
-            datasets: [{
-                label: 'Expenses ($)',
-                data: Object.values(monthlyExpenses),
-                backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                borderColor: 'rgba(255,99,132,1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true
-        }
-    });
+// Monthly Expense Chart
+var monthlyCtx = document.getElementById('monthlyExpenseChart').getContext('2d');
+var monthlyExpenseChart = new Chart(monthlyCtx, {
+    type: 'bar',
+    data: {
+        labels: Object.keys(monthlyExpenses),
+        datasets: [{
+            label: 'Monthly Expenses ($)',
+            data: Object.values(monthlyExpenses),
+            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+            borderColor: 'rgba(255,99,132,1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true
+    }
+});
 
-    // Yearly Expense Chart
-    var yearlyCtx = document.getElementById('yearlyExpenseChart').getContext('2d');
-    var yearlyExpenseChart = new Chart(yearlyCtx, {
-        type: 'line',
-        data: {
-            labels: Object.keys(yearlyExpenses),
-            datasets: [{
-                label: 'Yearly Expenses ($)',
-                data: Object.values(yearlyExpenses),
-                backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                fill: false,
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true
-        }
-    });
+// Daily Expense Chart (if you want to show daily also)
+var dailyCtx = document.getElementById('dailyExpenseChart').getContext('2d');
+var dailyExpenseChart = new Chart(dailyCtx, {
+    type: 'line',
+    data: {
+        labels: Object.keys(dailyExpenses),
+        datasets: [{
+            label: 'Daily Expenses ($)',
+            data: Object.values(dailyExpenses),
+            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            fill: false,
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true
+    }
+});
+
 </script>
 @endsection

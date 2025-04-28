@@ -1,69 +1,37 @@
 <?php
 
+namespace App\Http\Controllers;
 use App\Models\MonthlyExpense;
 use Illuminate\Http\Request;
+
 
 class MonthlyExpenseController extends Controller
 {
     // Display a listing of monthly expenses
-    public function index()
-    {
-        $expenses = MonthlyExpense::all();
-        return view('monthly_expenses.index', compact('expenses'));
-    }
+   // In MonthlyExpenseController.php
 
-    // Store a newly created monthly expense in storage
-    public function store(Request $request)
-    {
-        $request->validate([
-            'amount' => 'required|numeric',
-            'description' => 'required|string',
-            'month' => 'required|string',
-            'year' => 'required|numeric',
-            'category' => 'required|string',
-        ]);
+public function create()
+{
+    return view('monthly_expenses.create');
+}
 
-        MonthlyExpense::create($request->all());
+public function store(Request $request)
+{
+    $request->validate([
+        'description' => 'required|string',
+        'amount' => 'required|numeric',
+        'month' => 'required|integer',
+        'year' => 'required|integer',
+    ]);
 
-        return redirect()->route('monthly-expense.index');
-    }
+    MonthlyExpense::create([
+        'description' => $request->description,
+        'amount' => $request->amount,
+        'month' => $request->month,
+        'year' => $request->year,
+    ]);
 
-    // Show the form for creating a new monthly expense
-    public function create()
-    {
-        return view('monthly_expenses.create');
-    }
+    return redirect()->route('dashboard')->with('success', 'Monthly expense added successfully!');
+}
 
-    // Show the form for editing an existing monthly expense
-    public function edit($id)
-    {
-        $expense = MonthlyExpense::findOrFail($id);
-        return view('monthly_expenses.edit', compact('expense'));
-    }
-
-    // Update the specified monthly expense in storage
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'amount' => 'required|numeric',
-            'description' => 'required|string',
-            'month' => 'required|string',
-            'year' => 'required|numeric',
-            'category' => 'required|string',
-        ]);
-
-        $expense = MonthlyExpense::findOrFail($id);
-        $expense->update($request->all());
-
-        return redirect()->route('monthly-expense.index');
-    }
-
-    // Remove the specified monthly expense from storage
-    public function destroy($id)
-    {
-        $expense = MonthlyExpense::findOrFail($id);
-        $expense->delete();
-
-        return redirect()->route('monthly-expense.index');
-    }
 }
