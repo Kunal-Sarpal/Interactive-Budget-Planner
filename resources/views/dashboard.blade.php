@@ -77,20 +77,21 @@ document.addEventListener('DOMContentLoaded', function () {
     let dailyExpenses = @json($dailyExpenses ?? []);
     let yearlyExpenses = @json($yearlyExpenses ?? []);
     let topMonths = @json($topMonths ?? []);
+    console.log(monthlyExpenses, dailyExpenses, yearlyExpenses, topMonths);
 
     // Dummy Data Fallback
-    if (Object.keys(monthlyExpenses).length === 0) {
-        monthlyExpenses = { "January": 300, "February": 400, "March": 500 };
-    }
-    if (Object.keys(dailyExpenses).length === 0) {
-        dailyExpenses = { "Monday": 50, "Tuesday": 60, "Wednesday": 70 };
-    }
-    if (Object.keys(yearlyExpenses).length === 0) {
-        yearlyExpenses = { "2023": 5000, "2024": 6500 };
-    }
-    if (Object.keys(topMonths).length === 0) {
-        topMonths = { "January": 1200, "February": 1100, "March": 900, "April": 800, "May": 750 };
-    }
+    // if (Object.keys(monthlyExpenses).length === 0) {
+    //     monthlyExpenses = { "January": 300, "February": 400, "March": 500 };
+    // }
+    // if (Object.keys(dailyExpenses).length === 0) {
+    //     dailyExpenses = { "Monday": 50, "Tuesday": 60, "Wednesday": 70 };
+    // }
+    // if (Object.keys(yearlyExpenses).length === 0) {
+    //     yearlyExpenses = { "2023": 5000, "2024": 6500 };
+    // }
+    // if (Object.keys(topMonths).length === 0) {
+    //     topMonths = { "January": 1200, "February": 1100, "March": 900, "April": 800, "May": 750 };
+    // }
 
     // Common chart config function
     function createChart(ctx, type, labels, datasetLabel, data, colors = null) {
@@ -161,6 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
             'rgba(153, 102, 255, 0.6)'
         ]
     );
+    
 });
 </script>
 @endsection

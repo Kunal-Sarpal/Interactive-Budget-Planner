@@ -29,6 +29,7 @@ public function store(Request $request)
         'amount' => $request->amount,
         'month' => $request->month,
         'year' => $request->year,
+        'user_id' => auth()->id(),
     ]);
 
     return redirect()->route('dashboard')->with('success', 'Monthly expense added successfully!');

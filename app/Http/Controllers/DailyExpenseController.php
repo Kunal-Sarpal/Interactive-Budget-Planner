@@ -26,6 +26,7 @@ public function store(Request $request)
         'description' => $request->description,
         'amount' => $request->amount,
         'date' => $request->date,
+        'user_id' => auth()->id(),
     ]);
 
     return redirect()->route('dashboard')->with('success', 'Daily expense added successfully!');

@@ -10,36 +10,54 @@ class DboardController extends Controller
 {
     public function index()
     {
-        // Fetch all expenses
-        $monthlyExpensesData = MonthlyExpense::where('user_id', auth()->id())->get();
-        $dailyExpensesData = DailyExpense::where('user_id', auth()->id())->get();
-    
-        // Prepare Monthly Expense Data
-        $monthlyExpenses = [];
-        foreach ($monthlyExpensesData as $expense) {
-            $month = date('F', strtotime($expense->expense_date)); // Month name
-            $monthlyExpenses[$month] = ($monthlyExpenses[$month] ?? 0) + $expense->amount;
+        $userId = auth()->id();
+        if (!$userId) {
+            return redirect()->route('login')->with('error', 'Please login to view the dashboard');
         }
-    
-        // Prepare Daily Expense Data
-        $dailyExpenses = [];
-        foreach ($dailyExpensesData as $expense) {
-            $date = date('Y-m-d', strtotime($expense->expense_date));
-            $dailyExpenses[$date] = ($dailyExpenses[$date] ?? 0) + $expense->amount;
-        }
-    
-        // Prepare Yearly Expense Data
-        $yearlyExpenses = [];
-        foreach ($monthlyExpensesData as $expense) {
-            $year = date('Y', strtotime($expense->expense_date));
-            $yearlyExpenses[$year] = ($yearlyExpenses[$year] ?? 0) + $expense->amount;
-        }
-    
-        // Prepare Top 5 Most Expensive Months
-        $topMonths = collect($monthlyExpenses)->sortDesc()->take(5);
-    
-        // 👇 Now send ALL variables
-        return view('dashboard', compact('monthlyExpenses', 'dailyExpenses', 'yearlyExpenses', 'topMonths'));
+
+        // Fetch daily expenses grouped by day name (you might have to add 'date' in DailyExpense)
+        $dailyExpenses = DailyExpense::where('user_id', $userId)
+            ->get()
+            ->groupBy(function ($item) {
+                if (!empty($item->date)) {
+                    return \Carbon\Carbon::parse($item->date)->format('l'); // Monday, Tuesday, etc.
+                }
+                return 'Unknown'; // if no date field exists
+            })
+            ->map(function ($dayExpenses) {
+                return $dayExpenses->sum('amount');
+            })
+            ->toArray();
+
+        // Fetch monthly expenses grouped by month name
+        $monthlyExpenses = MonthlyExpense::where('user_id', $userId)
+            ->get()
+            ->groupBy('month') // grouping by stored month
+            ->map(function ($monthExpenses) {
+                return $monthExpenses->sum('amount');
+            })
+            ->toArray();
+
+        // Fetch yearly expenses grouped by year
+        $yearlyExpenses = MonthlyExpense::where('user_id', $userId)
+            ->get()
+            ->groupBy('year') // grouping by stored year
+            ->map(function ($yearExpenses) {
+                return $yearExpenses->sum('amount');
+            })
+            ->toArray();
+
+        // Top 5 months with highest expenses
+        $topMonths = MonthlyExpense::where('user_id', $userId)
+            ->get()
+            ->groupBy('month')
+            ->map(function ($monthExpenses) {
+                return $monthExpenses->sum('amount');
+            })
+            ->sortDesc()
+            ->take(5)
+            ->toArray();
+
+        return view('dashboard', compact('dailyExpenses', 'monthlyExpenses', 'yearlyExpenses', 'topMonths'));
     }
-    
 }

@@ -7,6 +7,8 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DailyExpenseController;
 use App\Http\Controllers\MonthlyExpenseController;
 use App\Http\Controllers\DboardController;
+use App\Models\DailyExpense;
+use App\Models\MonthlyExpense;
 
 
 // Authentication Routes
@@ -43,3 +45,17 @@ Route::post('/daily-expense', [DailyExpenseController::class, 'store'])->name('d
 // For monthly expenses
 Route::get('/monthly_expense/create', [MonthlyExpenseController::class, 'create'])->name('monthly_expense.create');
 Route::post('/monthly_expense', [MonthlyExpenseController::class, 'store'])->name('monthly_expense.store');
+// Put this in a temporary route for once
+Route::get('/fix-userid', function () {
+    $userId = auth()->id(); // or manually set one for now
+
+    DailyExpense::whereNull('user_id')->update([
+        'user_id' => $userId,
+    ]);
+
+    MonthlyExpense::whereNull('user_id')->update([
+        'user_id' => $userId,
+    ]);
+
+    return 'User ID added to all old expenses!';
+});

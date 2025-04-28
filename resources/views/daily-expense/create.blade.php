@@ -5,8 +5,14 @@
     <form action="{{ route('daily-expense.store') }}" method="POST">
         @csrf
         <div>
-            <label for="description">Description</label>
-            <input type="text" id="description" name="description" required>
+            <label for="description">Category</label>
+            <select id="description" name="description" required>
+                <option value="Food">Food</option>
+                <option value="Rent">Rent</option>
+                <option value="Household">Household</option>
+                <option value="Outings">Outings</option>
+                <option value="Transport">Transport</option>
+            </select>
         </div>
         <div>
             <label for="amount">Amount</label>
