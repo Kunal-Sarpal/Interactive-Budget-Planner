@@ -1,0 +1,32 @@
+# Use a lightweight PHP-FPM and Nginx base image
+FROM richarvey/nginx-php-fpm:3.1.6
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Copy project files
+COPY . .
+
+# Install MongoDB PHP extension
+RUN pecl install mongodb \
+    && echo "extension=mongodb.so" >> /usr/local/etc/php/conf.d/mongodb.ini
+
+# Install dependencies and build assets
+RUN composer install --no-dev --optimize-autoloader \
+    && npm install \
+    && npm run build \
+    && rm -rf node_modules
+
+# Set permissions for Laravel and script
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod +x /var/www/html/scripts/00-laravel-deploy.sh
+
+# Run deployment script
+RUN /var/www/html/scripts/00-laravel-deploy.sh
+
+# Expose port for Render
+EXPOSE 80
+
+# Start the app
+CMD ["/start.sh"]
