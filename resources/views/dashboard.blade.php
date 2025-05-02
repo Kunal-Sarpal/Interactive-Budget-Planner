@@ -4,7 +4,7 @@
 <div class="flex flex-col min-h-screen bg-gray-100">
 
     <!-- Top Bar -->
-    <header class="bg-blue-700 text-white p-5 shadow-md flex justify-between items-center">
+    <header class="bg-green-100 text-zinc-500 border-b-2 border-zinc-500 p-5 shadow-md flex justify-between items-center">
         <h1 class="text-3xl font-extrabold">Budget Planner</h1>
 
         <nav class="flex items-center space-x-6">
@@ -23,13 +23,13 @@
 
     @auth
     <!-- Add Expenses Section -->
-    <section class="w-full max-w-4xl mx-auto mt-10 p-6 bg-white rounded-xl shadow-md">
-        <h2 class="text-2xl font-semibold mb-6 text-gray-800">Manage Your Expenses</h2>
+    <section class="w-full max-w-4xl mx-auto mt-10 p-6 bg-white rounded border-zinc-400 border shadow-md">
+        <h2 class="text-2xl font-bold tracking-tighter mb-6 text-gray-800">Manage Your Expenses..</h2>
         <div class="flex flex-wrap gap-6">
-            <a href="{{ route('daily-expense.create') }}" class="flex-1 min-w-[200px] bg-green-600 hover:bg-green-700 text-white py-3 px-5 rounded-md text-center transition text-lg font-semibold">
+            <a href="{{ route('daily-expense.create') }}" class="flex-1 min-w-[200px] tracking-tight rounded-none hover:text-white border-2 border-green-500 text-green-500 hover:bg-green-700 text-white py-3 px-5 rounded-md text-center transition text-lg font-semibold">
                 Add Daily Expense
             </a>
-            <a href="{{ route('monthly_expense.create') }}" class="flex-1 min-w-[200px] bg-green-600 hover:bg-green-700 text-white py-3 px-5 rounded-md text-center transition text-lg font-semibold">
+            <a href="{{ route('monthly_expense.create') }}" class="flex-1 min-w-[200px]  tracking-tight bg-green-600 hover:bg-green-700 text-white py-3 px-5 rounded-md text-center transition text-lg font-semibold">
                 Add Monthly Expense
             </a>
         </div>
@@ -80,18 +80,18 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log(monthlyExpenses, dailyExpenses, yearlyExpenses, topMonths);
 
     // Dummy Data Fallback
-    // if (Object.keys(monthlyExpenses).length === 0) {
-    //     monthlyExpenses = { "January": 300, "February": 400, "March": 500 };
-    // }
-    // if (Object.keys(dailyExpenses).length === 0) {
-    //     dailyExpenses = { "Monday": 50, "Tuesday": 60, "Wednesday": 70 };
-    // }
-    // if (Object.keys(yearlyExpenses).length === 0) {
-    //     yearlyExpenses = { "2023": 5000, "2024": 6500 };
-    // }
-    // if (Object.keys(topMonths).length === 0) {
-    //     topMonths = { "January": 1200, "February": 1100, "March": 900, "April": 800, "May": 750 };
-    // }
+        if (Object.keys(monthlyExpenses).length === 0) {
+            monthlyExpenses = { "January": 300, "February": 400, "March": 500 };
+        }
+        if (Object.keys(dailyExpenses).length === 0) {
+            dailyExpenses = { "Monday": 50, "Tuesday": 60, "Wednesday": 70 };
+        }
+        if (Object.keys(yearlyExpenses).length === 0) {
+            yearlyExpenses = { "2023": 5000, "2024": 6500 };
+        }
+        if (Object.keys(topMonths).length === 0) {
+            topMonths = { "January": 1200, "February": 1100, "March": 900, "April": 800, "May": 750 };
+        }
 
     // Common chart config function
     function createChart(ctx, type, labels, datasetLabel, data, colors = null) {

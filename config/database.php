@@ -114,7 +114,7 @@ return [
         'mongodb' => [
             'driver' => 'mongodb',
             'dsn' => env('DB_URI', 'mongodb+srv://sarpalkunal7:kunal1234@cluster1.pc6dcst.mongodb.net'),
-            'database' => env('DB_DATABASE', 'school4'),
+            'database' => env('DB_DATABASE', 'school5'),
         ],
 
     ],
